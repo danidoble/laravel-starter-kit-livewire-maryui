@@ -56,7 +56,8 @@ new #[Layout('components.layouts.auth')] class extends Component {
                 <x-password label="{{ __('Confirm password') }}" wire:model="password_confirmation"
                     placeholder="*********" right autocomplete="new-password" />
                 <div class="mt-6 grid gap-2">
-                    <x-button type="submit" class="btn btn-primary btn-block" spinner="register">{{ 'Create account' }}</x-button>
+                    <x-button type="submit" class="btn btn-primary btn-block"
+                        spinner="register">{{ 'Create account' }}</x-button>
                 </div>
                 <div class="mt-2 inline-flex gap-x-1 justify-center items-center">
                     <span>{{ __('Already have an account?') }}</span>

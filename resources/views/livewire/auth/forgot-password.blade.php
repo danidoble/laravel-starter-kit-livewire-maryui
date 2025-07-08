@@ -31,25 +31,26 @@ new #[Layout('components.layouts.auth')] class extends Component {
                     {{ __('Enter your email to receive a password reset link') }}
                 </p>
 
-                <x-input label="{{ __('Email address') }}" wire:model="email" placeholder="test@example.com"
-                    autofocus autocomplete="email" />
+                <x-input label="{{ __('Email address') }}" wire:model="email" placeholder="test@example.com" autofocus
+                    autocomplete="email" />
 
-                    @session('status')
-                        <div class="alert alert-success shadow-sm rounded-md">
-                            <div class="flex-1">
-                                <label>{{ session('status') }}</label>
-                            </div>
+                @session('status')
+                    <div class="alert alert-success shadow-sm rounded-md">
+                        <div class="flex-1">
+                            <label>{{ session('status') }}</label>
                         </div>
-                    @endsession
+                    </div>
+                @endsession
 
                 <div class="mt-6 grid gap-2">
-                    <x-button type="submit" class="btn btn-primary btn-block" spinner="sendPasswordResetLink">{{ 'Email password reset link' }}</x-button>
+                    <x-button type="submit" class="btn btn-primary btn-block"
+                        spinner="sendPasswordResetLink">{{ 'Email password reset link' }}</x-button>
                 </div>
                 <div class="mt-2 grid gap-2">
-                        <div class="inline-flex gap-x-1 justify-center items-center">
-                            <span>Or, return to</span>
-                            <a href="{{ route('login') }}" class="underline">{{ __('Log in') }}</a>
-                        </div>
+                    <div class="inline-flex gap-x-1 justify-center items-center">
+                        <span>Or, return to</span>
+                        <a href="{{ route('login') }}" class="underline">{{ __('Log in') }}</a>
+                    </div>
                 </div>
             </x-form>
     </section>

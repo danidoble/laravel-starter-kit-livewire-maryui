@@ -51,6 +51,7 @@
 
 /* maryUI */
 @source "../../vendor/robsontenorio/mary/src/View/Components/**/*.php";
+@source "../../app/View/Components/**/*.php";
 
 /* Theme toggle */
 @custom-variant dark (&:where(.dark, .dark *));

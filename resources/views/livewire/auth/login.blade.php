@@ -105,7 +105,8 @@ new #[Layout('components.layouts.auth')] class extends Component {
                     autocomplete="current-password" />
                 <x-checkbox label="{{ __('Remember me') }}" wire:model="remember" />
                 <div class="mt-6 grid gap-2">
-                    <x-button type="submit" class="btn btn-primary btn-block" spinner="login">{{ 'Log in' }}</x-button>
+                    <x-button type="submit" class="btn btn-primary btn-block"
+                        spinner="login">{{ 'Log in' }}</x-button>
                 </div>
                 <div class="mt-2 grid gap-2">
                     <a href="{{ route('password.request') }}"

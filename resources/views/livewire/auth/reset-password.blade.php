@@ -41,17 +41,16 @@ new #[Layout('components.layouts.auth')] class extends Component {
         // Here we will attempt to reset the user's password. If it is successful we
         // will update the password on an actual user model and persist it to the
         // database. Otherwise we will parse the error and return the response.
-        $status = Password::reset(
-            $this->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user) {
-                $user->forceFill([
+        $status = Password::reset($this->only('email', 'password', 'password_confirmation', 'token'), function ($user) {
+            $user
+                ->forceFill([
                     'password' => Hash::make($this->password),
                     'remember_token' => Str::random(60),
-                ])->save();
+                ])
+                ->save();
 
-                event(new PasswordReset($user));
-            }
-        );
+            event(new PasswordReset($user));
+        });
 
         // If the password was successfully reset, we will redirect the user back to
         // the application's home authenticated view. If there is an error we can
@@ -78,11 +77,14 @@ new #[Layout('components.layouts.auth')] class extends Component {
                 </p>
 
                 <x-input label="{{ __('Email address') }}" wire:model="email" placeholder="email" autocomplete="email" />
-                <x-password label="{{ __('Password') }}" wire:model="password" placeholder="*********" right autocomplete="new-password" />
-                <x-password label="{{ __('Confirm password') }}" wire:model="password_confirmation" placeholder="*********" right autocomplete="new-password" />
+                <x-password label="{{ __('Password') }}" wire:model="password" placeholder="*********" right
+                    autocomplete="new-password" />
+                <x-password label="{{ __('Confirm password') }}" wire:model="password_confirmation"
+                    placeholder="*********" right autocomplete="new-password" />
 
                 <div class="mt-6 grid gap-2">
-                    <x-button type="submit" class="btn btn-primary btn-block" spinner="resetPassword">{{ 'Reset password' }}</x-button>
+                    <x-button type="submit" class="btn btn-primary btn-block"
+                        spinner="resetPassword">{{ 'Reset password' }}</x-button>
                 </div>
             </x-form>
     </section>

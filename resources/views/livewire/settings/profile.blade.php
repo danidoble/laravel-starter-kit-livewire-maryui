@@ -8,6 +8,7 @@ use Livewire\Volt\Component;
 
 new class extends Component {
     public string $name = '';
+    public string $username = '';
     public string $email = '';
 
     /**
@@ -16,6 +17,7 @@ new class extends Component {
     public function mount(): void
     {
         $this->name = Auth::user()->name;
+        $this->username = Auth::user()->username;
         $this->email = Auth::user()->email;
     }
 
@@ -29,7 +31,9 @@ new class extends Component {
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
 
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
+            'username' => ['required', 'string', 'lowercase', 'alpha_dash', 'max:255', Rule::unique(User::class)->ignore($user->id)],
+
+            'email' => ['nullable', 'string', 'lowercase', 'email', 'max:255'],
         ]);
 
         $user->fill($validated);
@@ -69,8 +73,10 @@ new class extends Component {
         <form wire:submit="updateProfileInformation" class="my-6 w-full space-y-6">
             <x-input wire:model="name" :label="__('Name')" required autofocus autocomplete="name" />
 
+            <x-input wire:model="username" :label="__('Username')" required autofocus autocomplete="username" />
+
             <div>
-                <x-input wire:model="email" :label="__('Email')" type="email" required autocomplete="email" />
+                <x-input wire:model="email" :label="__('Email')" type="email" autocomplete="email" />
 
                 @if (auth()->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !auth()->user()->hasVerifiedEmail())
                     <div>
@@ -94,16 +100,17 @@ new class extends Component {
 
             <div class="flex items-center gap-4">
                 <div class="flex items-center justify-end">
-                    <x-button class="btn-primary" type="submit" :label="__('Save')" spinner="updateProfileInformation"/>
+                    <x-button class="btn-primary" type="submit" :label="__('Save')" spinner="updateProfileInformation" />
                 </div>
 
                 @session('status')
-
                 @endsession
                 <x-action-message class="me-3" on="profile-updated">
                     {{ __('Saved.') }}
                 </x-action-message>
             </div>
         </form>
+
+        <livewire:settings.delete-user-form />
     </x-settings.layout>
 </section>

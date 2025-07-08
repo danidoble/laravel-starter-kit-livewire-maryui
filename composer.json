@@ -2,29 +2,30 @@
     "$schema": "https://getcomposer.org/schema.json",
     "name": "danidoble/maryui-starterkit",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "Starter kit for Laravel with Livewire and MaryUI",
     "keywords": [
         "laravel",
-        "framework"
+        "framework",
+        "livewire",
+        "maryui"
     ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
-        "livewire/livewire": "^3.6",
-        "livewire/volt": "^1.7",
-        "robsontenorio/mary": "^2.4"
+        "livewire/livewire": "^3.6.0",
+        "livewire/volt": "^1.7.0",
+        "robsontenorio/mary": "^2.4.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
         "laravel/pail": "^1.2.2",
-        "laravel/pint": "^1.13",
+        "laravel/pint": "^1.18",
         "laravel/sail": "^1.41",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
-        "pestphp/pest": "^3.8",
-        "pestphp/pest-plugin-laravel": "^3.2"
+        "phpunit/phpunit": "^11.5.3"
     },
     "autoload": {
         "psr-4": {
@@ -81,6 +82,6 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }

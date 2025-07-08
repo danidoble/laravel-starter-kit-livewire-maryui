@@ -1,6 +1,6 @@
 <div class="flex items-start max-md:flex-col">
     <div class="me-10 w-full pb-4 md:w-[220px]">
-        <x-menu class="!w-50" activate-by-route>
+        <x-menu class="w-full md:!w-50 " activate-by-route>
             <x-menu-item :title="__('Profile')" :link="route('settings.profile')" wire:navigate/>
             <x-menu-item :title="__('Password')" :link="route('settings.password')" wire:navigate/>
             <x-menu-item :title="__('Appearance')" :link="route('settings.appearance')" wire:navigate/>
