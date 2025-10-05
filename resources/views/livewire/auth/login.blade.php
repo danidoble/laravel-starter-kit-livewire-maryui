@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
@@ -7,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Laravel\Fortify\Features;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Livewire\Volt\Component;
@@ -20,6 +22,8 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
     public bool $remember = false;
 
+    protected bool $isEmail = false;
+
     /**
      * Handle an incoming authentication request.
      */
@@ -29,22 +33,24 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         $this->ensureIsNotRateLimited();
 
-        $credentials = [
-            'username' => $this->username,
-            'password' => $this->password,
-        ];
         if (filter_var($this->username, FILTER_VALIDATE_EMAIL)) {
-            $credentials['email'] = $this->username;
-            unset($credentials['username']);
+            $this->isEmail = true;
         }
 
-        if (!Auth::attempt($credentials, $this->remember)) {
-            RateLimiter::hit($this->throttleKey());
+        $user = $this->validateCredentials();
 
-            throw ValidationException::withMessages([
-                'username' => __('auth.failed'),
+        if (Features::canManageTwoFactorAuthentication() && $user->hasEnabledTwoFactorAuthentication()) {
+            Session::put([
+                'login.id' => $user->getKey(),
+                'login.remember' => $this->remember,
             ]);
+
+            $this->redirect(route('two-factor.login'), navigate: true);
+
+            return;
         }
+
+        Auth::login($user, $this->remember);
 
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
@@ -53,11 +59,33 @@ new #[Layout('components.layouts.auth')] class extends Component {
     }
 
     /**
+     * Validate the user's credentials.
+     */
+    protected function validateCredentials(): User
+    {
+        $credrentials = $this->isEmail
+            ? ['email' => $this->username, 'password' => $this->password]
+            : ['username' => $this->username, 'password' => $this->password];
+
+        $user = Auth::getProvider()->retrieveByCredentials($credrentials);
+
+        if (! $user || ! Auth::getProvider()->validateCredentials($user, ['password' => $this->password])) {
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'username' => __('auth.failed'),
+            ]);
+        }
+
+        return $user;
+    }
+
+    /**
      * Ensure the authentication request is not rate limited.
      */
     protected function ensureIsNotRateLimited(): void
     {
-        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
 
@@ -78,14 +106,14 @@ new #[Layout('components.layouts.auth')] class extends Component {
      */
     protected function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->username) . '|' . request()->ip());
+        return Str::transliterate(Str::lower($this->username).'|'.request()->ip());
     }
 }; ?>
 
 <div class="flex flex-col gap-6 w-full h-screen items-center justify-center p-2 sm:p-4">
     <section class="card w-md bg-base-200 shadow-sm">
         <div class="card-body">
-            <x-form wire:submit="login">
+            <x-form method="POST" wire:submit="login">
                 <h1 class="text-xl font-semibold text-center">{{ __('Log in to your account') }}</h1>
                 <p class="text-sm text-center text-base-content/60">
                     {{ __('Enter your username or your email and password below to log in') }}

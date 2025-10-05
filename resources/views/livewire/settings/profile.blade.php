@@ -70,7 +70,7 @@ new class extends Component {
     @include('livewire.settings.heading')
 
     <x-settings.layout :heading="__('Profile')" :subheading="__('Update your name and email address')">
-        <form wire:submit="updateProfileInformation" class="my-6 w-full space-y-6">
+        <x-form method="POST" wire:submit="updateProfileInformation" class="my-6 w-full space-y-6">
             <x-input wire:model="name" :label="__('Name')" required autofocus autocomplete="name" />
 
             <x-input wire:model="username" :label="__('Username')" required autofocus autocomplete="username" />
@@ -109,7 +109,7 @@ new class extends Component {
                     {{ __('Saved.') }}
                 </x-action-message>
             </div>
-        </form>
+        </x-form>
 
         <livewire:settings.delete-user-form />
     </x-settings.layout>

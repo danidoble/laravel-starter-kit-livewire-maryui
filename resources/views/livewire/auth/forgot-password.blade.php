@@ -25,7 +25,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
 <div class="flex flex-col gap-6 w-full h-screen items-center justify-center p-2 sm:p-4">
     <section class="card w-md bg-base-200 shadow-sm">
         <div class="card-body">
-            <x-form wire:submit="sendPasswordResetLink">
+            <x-form method="POST" wire:submit="sendPasswordResetLink">
                 <h1 class="text-xl font-semibold text-center">{{ __('Forgot password') }}</h1>
                 <p class="text-sm text-center text-base-content/60">
                     {{ __('Enter your email to receive a password reset link') }}

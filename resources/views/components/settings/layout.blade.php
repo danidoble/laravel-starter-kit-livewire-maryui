@@ -3,6 +3,9 @@
         <x-menu class="w-full md:!w-50 " activate-by-route>
             <x-menu-item :title="__('Profile')" :link="route('settings.profile')" wire:navigate/>
             <x-menu-item :title="__('Password')" :link="route('settings.password')" wire:navigate/>
+            @if (Laravel\Fortify\Features::canManageTwoFactorAuthentication())
+                <x-menu-item :title="__('Two-Factor Auth')" :link="route('two-factor.show')" wire:navigate/>
+            @endif
             <x-menu-item :title="__('Appearance')" :link="route('settings.appearance')" wire:navigate/>
         </x-menu>
     </div>

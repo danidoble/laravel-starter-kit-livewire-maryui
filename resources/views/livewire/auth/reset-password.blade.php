@@ -55,7 +55,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         // If the password was successfully reset, we will redirect the user back to
         // the application's home authenticated view. If there is an error we can
         // redirect them back to where they came from with their error message.
-        if ($status != Password::PasswordReset) {
+        if ($status !== Password::PasswordReset) {
             $this->addError('email', __($status));
 
             return;
@@ -70,7 +70,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
 <div class="flex flex-col gap-6 w-full h-screen items-center justify-center p-2 sm:p-4">
     <section class="card w-md bg-base-200 shadow-sm">
         <div class="card-body">
-            <x-form wire:submit="resetPassword">
+            <x-form method="POST" wire:submit="resetPassword">
                 <h1 class="text-xl font-semibold text-center">{{ __('Reset password') }}</h1>
                 <p class="text-sm text-center text-base-content/60">
                     {{ __('Please enter your new password below') }}

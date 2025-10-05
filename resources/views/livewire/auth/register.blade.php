@@ -4,6 +4,7 @@ use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
@@ -33,6 +34,8 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         Auth::login($user);
 
+        Session::regenerate();
+
         $this->redirectIntended(route('dashboard', absolute: false), navigate: true);
     }
 }; ?>
@@ -40,7 +43,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
 <div class="flex flex-col gap-6 w-full h-screen items-center justify-center p-2 sm:p-4">
     <section class="card w-md bg-base-200 shadow-sm">
         <div class="card-body">
-            <x-form wire:submit="register">
+            <x-form method="POST" wire:submit="register">
                 <h1 class="text-xl font-semibold text-center">{{ __('Create an account') }}</h1>
                 <p class="text-sm text-center text-base-content/60">
                     {{ __('Enter your details below to create your account') }}

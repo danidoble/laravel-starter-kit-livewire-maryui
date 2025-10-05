@@ -27,8 +27,8 @@ Route::middleware('auth')->group(function () {
         ->middleware(['signed', 'throttle:6,1'])
         ->name('verification.verify');
 
-    Volt::route('confirm-password', 'auth.confirm-password')
-        ->name('password.confirm');
+    // Volt::route('confirm-password', 'auth.confirm-password')
+    //     ->name('password.confirm');
 });
 
 Route::post('logout', App\Livewire\Actions\Logout::class)
